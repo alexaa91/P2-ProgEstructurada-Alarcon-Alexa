@@ -130,11 +130,16 @@ def calcular_rmse(predicciones, reales):
 # ==========================================
 if __name__ == "__main__":
     print("=== INICIANDO SIMULADOR DE AGENTES DE IA ===")
+    # 1. Información del sistema
     print("\n1. Validación del Entorno")
     obtener_info_sistema()
     
+    # 2. Simulación de entrenamiento
     print("\n2. Simulación de Épocas")
+    # Capturamos los dos valores que retorna tu función (lista_loss y lista_latencia)
     perdidas, latencias = simular_metricas_entrenamiento(MAX_EPOCHS)
+    # 3. Análisis estadístico de rendimiento
+    # Pasamos la lista de pérdidas como lo requiere la función
     analizar_rendimiento(perdidas)
     print("\nCÁLCULO DE ERROR DE PRECISIÓN")
     valores_ideales = [0.0] * len(perdidas)
@@ -151,3 +156,60 @@ if __name__ == "__main__":
         print(f"Estado del modelo estable. Último loss ({ultima_perdida:.2f}) bajo el umbral.")
         print("\n=== SIMULACIÓN FINALIZADA CON ÉXITO ===")
  
+"""
+1. En tu código, al usar datetime.datetime.now(),
+¿cuál es el objeto/clase y cuál es el método que estás llamando? Explica
+cómo se relaciona esto con el concepto de biblioteca externa.  
+    Al invocar datetime.datetime.now(), el primer término hace referencia al módulo importado, el 
+    segundo corresponde a la clase que define la estructura de fecha y hora en Python y now() es 
+    el método encargado de consultar el reloj del sistema operativo para devolver un objeto con la hora 
+    actual exacta, y esto se relaciona directamente con el concepto de biblioteca externa, ya que reutilizamos 
+    código previamente desarrollado y optimizado, evitando tener que programar desde cero un 
+    sistema que calcule milisegundos y los convierta manualmente en un formato de calendario
+
+
+2. ¿Qué diferencia existe en la sintaxis de tu código
+al importar un módulo completo (ej: import math) versus importar un método
+específico (ej: from math import sqrt) al momento de invocar sus funciones?
+    Cuando se utiliza la importación completa (import math), es necesario anteponer
+    el nombre del módulo en cada llamada, por ejemplo math.sqrt(), lo que ayuda a evitar 
+    conflictos entre funciones con nombres similares. En cambio, al importar una función 
+    específica (from math import sqrt), esta se carga directamente en el entorno global y 
+    puede utilizarse únicamente con su nombre, como sqrt()
+
+
+3. Describe brevemente la secuencia lógica de pasos que
+implementaste para conectar los datos generados por tu función de
+simulación con la función que calcula el error (RMSE).
+    La secuencia lógica comenzó en la función de simulación, la cual registró iterativamente 
+    los valores flotantes del loss dentro de una colección dinámica y los retornó al bloque 
+    principal bajo la variable perdidas, luego en el __main__ se generó una lista 
+    espejo del mismo tamaño llamada valores_ideales llena solo de ceros (0.0) para 
+    representar el escenario de convergencia perfecta del modelo, y finalmente ambas colecciones se inyectaron de forma ordenada como argumentos en la función calcular_rmse, 
+    permitiendo que su bucle interno procesara las diferencias e índices correspondientes 
+    para determinar el error cuadrático medio
+
+
+4. Identifica al menos dos tipos de datos
+complejos (colecciones) que utilizaste para organizar los resultados de tus
+análisis y justifica por qué elegiste esa estructura en lugar de variables
+simples
+    Para la organización de los análisis se utilizaron listas (list) como estructuras de 
+    almacenamiento de datos, ya que ofrecen una mayor flexibilidad en comparación con 
+    variables simples como int o float, mientras que una variable convencional solo puede 
+    contener un valor a la vez, una lista permite almacenar múltiples datos de forma 
+    secuencial bajo un mismo identificador. Esto evitó tener que crear variables 
+    independientes, haciendo que el código fuera más limpio, 
+    escalable y eficiente
+
+5. Al utilizar las funciones de la biblioteca
+statistics, ¿tuviste que programar la fórmula matemática matemática de la
+desviación estándar? Relaciona esto con el concepto de Abstracción visto
+en clase.
+    En ningún momento del desarrollo fue necesario programar manualmente la ecuación 
+    matemática de la desviación estándar, la cual implica calcular la media de los datos, 
+    restar cada elemento individual, elevar las diferencias al cuadrado, sumarlas, dividir 
+    el resultado y finalmente extraer la raíz cuadrada. Esto representa claramente el 
+    concepto de abstracción visto en clase, ya que la función statistics.stdev() actúa como 
+    una “caja negra” que oculta toda la complejidad de su implementación interna
+"""
