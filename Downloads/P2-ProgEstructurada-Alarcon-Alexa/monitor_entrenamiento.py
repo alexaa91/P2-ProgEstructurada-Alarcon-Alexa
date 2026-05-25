@@ -129,5 +129,25 @@ def calcular_rmse(predicciones, reales):
 # 4. PROGRAMA PRINCIPAL (PUNTO DE ENTRADA)
 # ==========================================
 if __name__ == "__main__":
- print("=== INICIANDO SIMULADOR DE AGENTES DE IA ===")
- # TODO: Invocar las funciones, orquestar el flujo y mostrar reportes ordenados.
+    print("=== INICIANDO SIMULADOR DE AGENTES DE IA ===")
+    print("\n1. Validación del Entorno")
+    obtener_info_sistema()
+    
+    print("\n2. Simulación de Épocas")
+    perdidas, latencias = simular_metricas_entrenamiento(MAX_EPOCHS)
+    analizar_rendimiento(perdidas)
+    print("\nCÁLCULO DE ERROR DE PRECISIÓN")
+    valores_ideales = [0.0] * len(perdidas)
+    rmse_resultado = calcular_rmse(perdidas, valores_ideales)
+    print(f"Resultado RMSE del Modelo: {rmse_resultado:.4f}")
+    
+    print("\n3. Verificación de Seguridad del Sistema")
+    ultima_perdida = perdidas[-1] 
+    if ultima_perdida > UMBRAL_ERROR_CRITICO:
+        print(f"[ALERTA CRÍTICA] La última pérdida ({ultima_perdida:.2f}) superó el umbral permitido ({UMBRAL_ERROR_CRITICO}).")
+        print("Forzando salida limpia del sistema...")
+        sys.exit(1)
+    else:
+        print(f"Estado del modelo estable. Último loss ({ultima_perdida:.2f}) bajo el umbral.")
+        print("\n=== SIMULACIÓN FINALIZADA CON ÉXITO ===")
+ 
