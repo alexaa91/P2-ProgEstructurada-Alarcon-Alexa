@@ -41,16 +41,42 @@ def obtener_info_sistema():
     else:
         print(f"Compatibilidad: OK (Python {version_mayor}.{version_menor})")
 
-    pass
-
 
 def simular_metricas_entrenamiento(cantidad_epochs):
- """
- Usa las bibliotecas 'random' y 'datetime' para simular los datos de entrenamiento.
- Requisitos: 3 llamadas a 'random' y 3 llamadas a 'datetime'.
- """
- # TODO: Implementar lógica
- pass
+    """
+    Usa las bibliotecas 'random' y 'datetime' para simular los datos de entrenamiento.
+    Requisitos: 3 llamadas a 'random' y 3 llamadas a 'datetime'.
+    """
+    
+    inicio_simulacion = datetime.datetime.now()
+    fecha_formateada = inicio_simulacion.strftime("%d/%m/%Y %H:%M:%S")
+    print(f"\nInicio: {fecha_formateada}")
+ 
+    lista_loss = []
+    lista_latencia = []
+    eventos_log = ["Epoch exitoso", "Gradiente inestable", "Actualización de pesos"]
+ 
+    contador_epoch = 1
+    while contador_epoch <= cantidad_epochs:
+        loss_epoch = random.uniform(0.05, 1.0)
+        probabilidad = random.random()
+        evento = random.choice(eventos_log)
+ 
+        lista_loss.append(loss_epoch)
+        lista_latencia.append(random.uniform(50, 300)) #
+        estado = "OK" if probabilidad >= 0.3 else "FALLO"
+        print(f"Epoch {contador_epoch} -> Loss: {loss_epoch:.2f} | {estado} | {evento}")
+        contador_epoch = contador_epoch + 1
+ 
+    fin_simulacion = datetime.datetime.now()
+    duracion = fin_simulacion - inicio_simulacion
+ 
+    print(f"Fin: {fin_simulacion.strftime('%d/%m/%Y %H:%M:%S')}")
+    print(f"Duración: {duracion.total_seconds():.2f} segundos")
+ 
+    return lista_loss, lista_latencia
+
+
 def analizar_rendimiento(lista_loss):
  """
  Usa la biblioteca 'statistics' para analizar el comportamiento del entrenamiento.
