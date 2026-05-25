@@ -63,8 +63,11 @@ def simular_metricas_entrenamiento(cantidad_epochs):
         evento = random.choice(eventos_log)
  
         lista_loss.append(loss_epoch)
-        lista_latencia.append(random.uniform(50, 300)) #
-        estado = "OK" if probabilidad >= 0.3 else "FALLO"
+        lista_latencia.append(random.uniform(50, 300)) 
+        if probabilidad >= 0.3:
+            estado = "OK"
+        else:
+            estado = "FALLO"
         print(f"Epoch {contador_epoch} -> Loss: {loss_epoch:.2f} | {estado} | {evento}")
         contador_epoch = contador_epoch + 1
  
@@ -78,12 +81,27 @@ def simular_metricas_entrenamiento(cantidad_epochs):
 
 
 def analizar_rendimiento(lista_loss):
- """
- Usa la biblioteca 'statistics' para analizar el comportamiento del entrenamiento.
- Requisitos: 3 llamadas distintas a la biblioteca 'statistics'.
- """
- # TODO: Implementar lógica
- pass
+    """
+    Usa la biblioteca 'statistics' para analizar el comportamiento del entrenamiento.
+    Requisitos: 3 llamadas distintas a la biblioteca 'statistics'.
+    """
+    print("\n=== ANÁLISIS ESTADÍSTICO DE RENDIMIENTO ===")
+    if len(lista_loss) < 2:
+        print("Error: No hay suficientes datos para un análisis estadístico completo.")
+    
+        if len(lista_loss) == 1:
+            print(f"Media única: {statistics.mean(lista_loss):.4f}")
+        return
+
+    media_loss = statistics.mean(lista_loss)
+    desviacion_loss = statistics.stdev(lista_loss)
+    mediana_loss = statistics.median(lista_loss)
+    
+    print(f"Media del Loss: {media_loss:.4f}")
+    print(f"Desviación Estándar (Estabilidad): {desviacion_loss:.4f}")
+    print(f"Mediana del Loss: {mediana_loss:.4f}")
+
+
 def calcular_rmse(predicciones, reales):
  """
  Usa la biblioteca 'math' para calcular el Root Mean Squared Error (RMSE).
